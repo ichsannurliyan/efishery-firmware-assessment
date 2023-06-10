@@ -1,119 +1,58 @@
 #include <Arduino.h>
 #include <WiFi.h>
-#include <BLEDevice.h>
+#include <ENVClientFunction.h>
+#include <PubSubClient.h>
+#include <ArduinoJson.h>
+// #include <MQTTClientFunction.h>
 
-#define bleServerName "ESP32_BLE_Server"
-
-#define ENVIRONMENT_UUID "ef2944a8-05b0-11ee-be56-0242ac120002"
-#define TEMPERATURE_UUID "ef2944a8-05b1-11ee-be56-0242ac120002"
-#define CO2_UUID "ef2944a8-05b2-11ee-be56-0242ac120002"
-#define HUMIDITY_UUID "ef2944a8-05b3-11ee-be56-0242ac120002"
-
-static BLEUUID temperatureCharacteristicUUID(TEMPERATURE_UUID);
-static BLEUUID humidityCharacteristicUUID(HUMIDITY_UUID);
-static BLEUUID co2CharacteristicUUID(CO2_UUID);
-
-static boolean doConnect = false;
-static boolean connected = false;
-
-static BLEAddress *pServerAddress;
-
-static BLERemoteCharacteristic* temperatureCharacteristic;
-static BLERemoteCharacteristic* humidityCharacteristic;
-static BLERemoteCharacteristic* co2Characteristic;
-
-const uint8_t notificationOn[] = {0x1, 0x0};
-const uint8_t notificationOff[] = {0x0, 0x0};
-
-char* temperatureChar;
-char* humidityChar;
-char* co2Char;
-
+String temperatureData, humidityData, co2Data;
 boolean newTemperature, newHumidity, newCo2;
+boolean doConnect = false;
+boolean connected = false;
 
-static void temperatureNotifyCallback(BLERemoteCharacteristic* pBLERemoteCharacteristic, uint8_t* pData, size_t length, bool isNotify);
-static void humidityNotifyCallback(BLERemoteCharacteristic* pBLERemoteCharacteristic, uint8_t* pData, size_t length, bool isNotify);
-static void co2NotifyCallback(BLERemoteCharacteristic* pBLERemoteCharacteristic, uint8_t* pData, size_t length, bool isNotify);
+const char * wifiSsid = "TP-Link_7CAA";
+const char * wifiPassword = "49577471";
 
-bool connectToServer(BLEAddress pAddress) {
-  BLEClient *pClient = BLEDevice::createClient();
+// const char * mqttServer = "1e274e07458745289062e09df40ddbc0.s2.eu.hivemq.cloud";
+// int mqttPort = 8883;
+// String mqttUser = "efisheryassessment";
+// String mqttPassword = "Testmqtt12345";
+// String mqttPubTopic = "/environment";
+// String mqttSubTopic = "/deviceControl";
+// String deviceId = "env00001";
 
-  pClient->connect(pAddress);
-  Serial.println("Connected to the server");
+const char * mqttServer = "tailor.cloudmqtt.com";
+int mqttPort = 11933;
+String mqttUser = "sobinwaj";
+String mqttPassword = "32GHLBqgoufD";
+String mqttPubTopic = "/environment";
+String mqttSubTopic = "/deviceControl";
+String deviceId = "env00001";
 
-  BLERemoteService* pRemoteService = pClient->getService(ENVIRONMENT_UUID);
-  if (pRemoteService == nullptr) {
-    Serial.print("Failed to find the Service UUID");
-    Serial.println(ENVIRONMENT_UUID);
-    return (false);
-  }
+BLEAddress *pServerAddress;
+WiFiClient esp32client;
+PubSubClient client(esp32client);
+ENVBLEClient envBLE;
 
-  temperatureCharacteristic = pRemoteService->getCharacteristic(temperatureCharacteristicUUID);
-  humidityCharacteristic = pRemoteService->getCharacteristic(humidityCharacteristicUUID);
-  co2Characteristic = pRemoteService->getCharacteristic(co2CharacteristicUUID);
-
-  if (temperatureCharacteristic == nullptr || humidityCharacteristic == nullptr || co2Characteristic == nullptr) {
-    Serial.print("Failed to find our characteristic UUID");
-    return false;
-  }
-  Serial.println(" - Found our characteristics");
- 
-  //Assign callback functions for the Characteristics
-  temperatureCharacteristic->registerForNotify(temperatureNotifyCallback);
-  humidityCharacteristic->registerForNotify(humidityNotifyCallback);
-  co2Characteristic->registerForNotify(co2NotifyCallback);
-  return true;
-}
-
-class MyAdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
-  void onResult(BLEAdvertisedDevice advertisedDevice) {
-    if (advertisedDevice.getName() == bleServerName) {
-      advertisedDevice.getScan()->stop();
-      pServerAddress = new BLEAddress(advertisedDevice.getAddress());
-      doConnect = true;
-      Serial.println("Device found. Connecting!");
-    }
-  }
-};
-
-static void temperatureNotifyCallback(BLERemoteCharacteristic* pBLERemoteCharacteristic, uint8_t* pData, size_t length, bool isNotify) {
-  temperatureChar = (char*)pData;
-  newTemperature = true;
-}
-
-static void humidityNotifyCallback(BLERemoteCharacteristic* pBLERemoteCharacteristic, uint8_t* pData, size_t length, bool isNotify) 
-{
-  humidityChar = (char*)pData;
-  newHumidity = true;
-}
-
-static void co2NotifyCallback(BLERemoteCharacteristic* pBLERemoteCharacteristic, uint8_t* pData, size_t length, bool isNotify) 
-{
-  co2Char = (char*)pData;
-  newCo2 = true;
-}
+void callback(char* topic, byte* payload, unsigned int length);
+void publish();
+void reconnect();
+void MQTTinit();
+void wifiInit();
+String pubMessageStruct();
 
 void setup() {
- // put your setup code here, to run once:
  Serial.begin(115200);
- 
- BLEDevice::init("");
-
- BLEScan *pBLEScan = BLEDevice::getScan();
- pBLEScan->setAdvertisedDeviceCallbacks(new MyAdvertisedDeviceCallbacks());
- pBLEScan->setActiveScan(true);
- pBLEScan->start(30, true);
+ wifiInit();
+ MQTTinit();
+ envBLE.init();
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
   if (doConnect == true) {
-    if (connectToServer(*pServerAddress)) {
+    if (envBLE.connectToServer(*pServerAddress)) {
       Serial.println("We are now connected to the BLE Server.");
-      
-      temperatureCharacteristic->getDescriptor(BLEUUID((uint16_t)0x2902))->writeValue((uint8_t*)notificationOn, 2, true);
-      humidityCharacteristic->getDescriptor(BLEUUID((uint16_t)0x2902))->writeValue((uint8_t*)notificationOn, 2, true);
-      co2Characteristic->getDescriptor(BLEUUID((uint16_t)0x2902))->writeValue((uint8_t*)notificationOn, 2, true);
+      envBLE.getDescriptor();
       connected = true;
     } else {
       Serial.println("We have failed to connect to the server; Restart your device to scan for nearby BLE server again.");
@@ -121,18 +60,118 @@ void loop() {
     doConnect = false;
   }
   if (newTemperature && newHumidity && newCo2){
+    // wifiInit();
     newTemperature = false;
     newHumidity = false;
     newCo2 = false;
+    temperatureData = envBLE.getValue(TEMPERATURE_DATA);
+    humidityData = envBLE.getValue(HUMIDITY_DATA);
+    co2Data = envBLE.getValue(CO2_DATA);
     Serial.print("Temperature: ");
-    Serial.print(temperatureChar);
+    Serial.print(temperatureData);
     Serial.println(" C");
     Serial.print("Humidity: ");
-    Serial.print(humidityChar);
+    Serial.print(humidityData);
     Serial.println(" %");
     Serial.print("CO2: ");
-    Serial.print(co2Char);
+    Serial.print(co2Data);
     Serial.println(" ppm");
+    publish();
   }
   delay(5000);
+  if (!client.connected())
+  {
+    reconnect();
+  }
+  client.loop();
+}
+
+void wifiInit() {
+  delay(10);
+  // We start by connecting to a WiFi network
+  Serial.println();
+  Serial.print("Connecting to ");
+  Serial.println(wifiSsid);
+
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(wifiSsid, wifiPassword);
+
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+
+  randomSeed(micros());
+
+  Serial.println("");
+  Serial.println("WiFi connected");
+  Serial.println("IP address: ");
+  Serial.println(WiFi.localIP());
+}
+
+void MQTTinit()
+{
+  client.setServer(mqttServer, mqttPort);
+  client.setCallback(callback);
+  reconnect();
+}
+
+void callback(char* topic, byte* payload, unsigned int length) 
+{
+  Serial.print("Message arrived [");
+  Serial.print(topic);
+  Serial.print("] ");
+  for (int i=0;i<length;i++) {
+    Serial.print((char)payload[i]);
+  }
+  Serial.println();
+}
+
+void reconnect() 
+{
+  // Loop until we're reconnected
+  while (!client.connected()) {
+    Serial.print("Attempting MQTT connection...");
+    // Create a random client ID
+    String clientId = "ESP32Client-";
+    clientId += deviceId;
+    // Attempt to connect
+    if (client.connect(clientId.c_str(),mqttUser.c_str(),mqttPassword.c_str())) {
+      Serial.println("connected");
+      // Once connected, publish an announcement...
+      // client.publish("outTopic", "hello world");
+      // ... and resubscribe
+      client.subscribe(mqttSubTopic.c_str());
+    } else {
+      wifiInit();
+      Serial.print("failed, rc=");
+      Serial.print(client.state());
+      Serial.println(" try again in 5 seconds");
+      // Wait 5 seconds before retrying
+      delay(5000);
+    }
+  }
+}
+
+String pubMessageStruct()
+{
+  String message = "{\"eventName\":\"deviceStatus\",\"status\":[{\"device\":\"temperature\",\"value\":\"";
+  message += temperatureData; 
+  message += "\"},";
+  message += "{\"device\":\"humidity\",\"value\":\"";
+  message += humidityData; 
+  message += "\"},";
+  message += "{\"device\":\"co2\",\"value\":\"";
+  message += co2Data; 
+  message += "\"}]}";
+
+  return message;
+}
+
+void publish()
+{
+  String publishMessage = pubMessageStruct();
+  if (client.publish(mqttPubTopic.c_str(), publishMessage.c_str())){
+    Serial.println("Message successfully published");
+  };
 }
