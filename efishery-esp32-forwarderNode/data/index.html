@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>Card</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    </head>
+    <style>
+        .background {
+            background-repeat: no-repeat;
+            /* background-size: 1080px,1440px; */
+            /* background-position: center,bottom; */
+            background-color: rgb(17, 164, 137);
+            /* background-attachment:fixed; */
+            position:center;
+            /* height: 830px;
+            width: 1440px; */
+            /* margin: auto; */
+            /* opacity: 0.7; */
+        }
+        img {
+            pointer-events: none;
+            position:absolute;
+            /* margin-left: -100px; */
+            /* left: 0;
+            right: 0;
+            top: 0;
+            bottom:0; */
+            margin: auto;
+            width: 10%;
+            height: 25%;
+            opacity: 1;
+            z-index: 0;
+        }
+        .rotateimg90 {
+            transform: rotate(90deg);
+        }
+        .box {
+            display:flex;
+            flex-wrap: wrap;
+            align-items:center;
+            justify-content: center;
+            padding-top: 0px;
+            padding-left: 50px;
+            padding-right: 50px;
+            padding-bottom: 100px;
+            /* flex-direction:row; */
+            background-color: whitesmoke;
+            width:fit-content;
+            height:fit-content;
+            border: 0px;
+            border-radius: 10px;
+            /* position:relative;; */
+            /* margin:auto; */
+            /* margin: 6rem auto 8.1rem auto; */
+            margin: 6rem auto auto auto;
+            /* margin-left: auto;
+            margin-right: auto;
+            margin-top:auto;
+            margin-bottom: auto; */
+            /* opacity: 0.7; */
+        }
+        .box > div {
+            /* margin: 0px; */
+            /* width: 195px;
+            height: 500px; */
+            /* margin: 10px; */
+            /* text-align: right; */
+            /* background-color: black; */
+            /* flex: 0%;
+            padding: 0px; */
+            /* background-color: rgb(250, 239, 239); */
+        }
+        .nav {
+            list-style-type: none;
+            word-wrap:break-word;
+            margin-top: 25px;
+            white-space: nowrap;
+            padding-top: 50px;
+            /* padding-bottom: 100px; */
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 30px;
+            text-decoration: none;
+        }
+        .nav a{
+            position: absolute;
+            display:contents;
+            color: black;
+            text-align: center;
+            padding-left: 0px;
+            padding-right: 0px;
+            margin-bottom: 100px;
+            /* padding: 14px 16px; */
+            text-decoration: none;
+        }
+        .nav a:hover{
+            background-color:transparent;
+            /* text-decoration: underline; */
+            text-underline-offset: 12px;
+            border-radius: 10px;
+            color: black;
+        }
+        .nav a.active{
+            text-align: center;
+            /* display: flex; */
+            font-weight: bold;
+            /* text-decoration: underline; */
+            margin-bottom: 100px;
+            text-underline-offset: 12px;
+            border-bottom: 20px;
+            border-bottom-color: aqua;
+        }
+        .email {
+            width: 350px;
+            height: 60px;
+            padding: 12px 20px;
+            /* margin: 16px 0; */
+            /* margin-left: 100px; */
+            margin-top: 55px;
+            box-sizing: border-box;
+            font-size: 20px;
+        }
+        input[type=text] {
+            width: 350px;
+            height: 60px;
+            padding: 12px 20px;
+            /* margin: 16px 0; */
+            /* margin-left: 100px; */
+            background-color: transparent;
+            border-top: transparent;
+            border-left: transparent;
+            border-right: transparent;
+            border-bottom: 2px solid rgb(17, 164, 137);
+            margin-top: 25px;
+            box-sizing:border-box;
+            font-size: 20px;
+        }
+
+        input[type=text]:active {
+            width: 350px;
+            height: 60px;
+            padding: 12px 20px;
+            /* margin: 16px 0; */
+            /* margin-left: 100px; */
+            background-color: transparent;
+            border-top: transparent;
+            border-left: transparent;
+            border-right: transparent;
+            border-bottom: 2px solid rgb(17, 164, 137);
+            margin-top: 25px;
+            box-sizing:border-box;
+            font-size: 20px;
+        }
+
+        input[type=password] {
+            width: 350px;
+            height: 60px;
+            padding: 12px 20px;
+            /* margin: 16px 0; */
+            /* margin-left: 100px; */
+            background-color: transparent;
+            border-top: transparent;
+            border-left: transparent;
+            border-right: transparent;
+            border-bottom: 2px solid rgb(17, 164, 137);
+            margin-top: 25px;
+            box-sizing: border-box;
+            font-size: 20px;
+        }
+        .checkbox-container {
+            padding-top: 5px;
+            padding-bottom: 10px;
+        }
+        .login {
+            /* display: inline-flex; */
+            font-family: 'Courier New', Courier, monospace;
+            background-color: rgb(17, 164, 137);
+            border: none;
+            border-radius: 25px;
+            margin: auto;
+            /* padding-top: 10px;
+            padding-bottom: 10px; */
+            /* margin-left: 147.5px; */
+            /* margin-top: 10px; */
+            /* margin-bottom: 15px; */
+            width: 8em;
+            height: 2em;
+            font-size: 32px;
+            color: white;
+            align-items: center;
+            text-align: center;
+        }
+        li {
+            align-items: center;
+            align-self: center;
+            align-content: center;
+            display: inline-flex;
+            /* margin-left: 0px;
+            margin-right: 0px; */
+            white-space: nowrap;
+        }
+
+    </style>
+    <body class="background">
+        <div class="box">
+            <div>
+                <!-- <img src="line-horizontal.png" class="rotateimg90" style="width: 500px;margin-top: 0px;position: absolute;"> -->
+            </div>
+            <div>
+                <div class="nav">
+                    <!-- <li><a href="SIGNIN">Smart Modem</a></li> -->
+                    <li><img src="efishery" style="width:350px;height:150px;"></li>
+                    <!-- <li><a href="signup.html">SIGN UP</a></li> -->
+                    <form action="/index.html/loginHandler" method="get" style="display:flex;flex-direction: column;margin-top: 55px;" class="form ">
+                        <input type="text" id="Username" name="username" placeholder="Username" autocomplete="on" required>
+                        <input type="password" id="Password" name="password" placeholder="Password" autocomplete="on" required>
+                        <div class="checkbox-container">
+                            <input type="checkbox" name="checkbox-pass" id="checkbox-pass" onclick="myFunction()">
+                            <label for="checkbox-pass" style="font-size: 60%; font-family:'Times New Roman', Times, serif;">Show Password</label>
+                        </div>
+                        <button id="submit-btn" type="submit" onClick="click()" name="submit" class="login">LOGIN</button>
+                        <script>
+                            function myFunction() {
+                                // alert("deviceJson");
+                                var x = document.getElementById("Password");
+                                if (x.type === "password") {
+                                    x.type = "text";
+                                } else {
+                                    x.type = "password";
+                                }
+                            }
+                            function click(){
+                                var user = document.getElementById("Username");
+                                var pass = document.getElementById("Password");
+
+                                if (user.value.length == 0 || pass.value.length == 0){
+                                    alert("Please insert the username/password")
+                                } else {
+                                }
+                            }
+                        </script>
+                    </form>
+                </div>
+                <!-- <br><br><br><br><br> -->
+                <!-- <li><a href="forgotpass.html" style="margin-left: 120px;">Forgot Password?</a> -->
+            </div>
+            <!-- <div>
+                <header style="font-size: 50px;text-align: right;">&&&&&LOGIN PAGE MANTAP BANEGT EMANG BROOOO</header>
+            </div> -->
+        </div>
+    </body>
+</html>

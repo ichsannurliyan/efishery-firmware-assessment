@@ -1,13 +1,13 @@
 #include <ENVServerFunction.h>
 
 BLECharacteristic TemperatureCharacteristics(TEMP_UUID, BLECharacteristic::PROPERTY_NOTIFY);
-BLEDescriptor TemperatureDescriptor(BLEUUID((uint16_t)0x2903));
+BLEDescriptor TemperatureDescriptor(BLEUUID((uint16_t)0x2902));
 
 BLECharacteristic HumidityCharacteristics(HUMIDITY_UUID, BLECharacteristic::PROPERTY_NOTIFY);
-BLEDescriptor HumidityDescriptor(BLEUUID((uint16_t)0x2903));
+BLEDescriptor HumidityDescriptor(BLEUUID((uint16_t)0x2902));
 
 BLECharacteristic CO2Characteristics(CO2_UUID, BLECharacteristic::PROPERTY_NOTIFY);
-BLEDescriptor CO2Descriptor(BLEUUID((uint16_t)0x2903));
+BLEDescriptor CO2Descriptor(BLEUUID((uint16_t)0x2902));
 
 void sensorNodeCallbacks::onConnect(BLEServer* pServer){
     deviceConnected = true;
@@ -15,6 +15,7 @@ void sensorNodeCallbacks::onConnect(BLEServer* pServer){
 
 void sensorNodeCallbacks::onDisconnect(BLEServer* pServer){
     deviceConnected = false;
+    pServer->getAdvertising()->start();
 }
 
 ENVFunction::ENVFunction() {}
@@ -31,7 +32,8 @@ void ENVFunction::serverStart()
     BLEService *envService = pServer->createService(ENVIRONMENT_UUID);
 
     envService->addCharacteristic(&TemperatureCharacteristics);
-    TemperatureDescriptor.setValue("Temperature in Celcius");
+
+    TemperatureDescriptor.setValue("Temperature");
     TemperatureCharacteristics.addDescriptor(&TemperatureDescriptor);
 
     envService->addCharacteristic(&HumidityCharacteristics);
@@ -53,14 +55,16 @@ void ENVFunction::serverStart()
 void ENVFunction::setServerValue(int sensorProperty, float sensorValue)
 {
     Serial.println("Masuk nih");
+    static char value[6];
+    dtostrf(sensorValue, 6, 2, value);
     if(sensorProperty == 0){
-        TemperatureCharacteristics.setValue(sensorValue);
+        TemperatureCharacteristics.setValue(value);
         TemperatureCharacteristics.notify();
     } else if (sensorProperty == 1){
-        HumidityCharacteristics.setValue(sensorValue);
+        HumidityCharacteristics.setValue(value);
         HumidityCharacteristics.notify();
     } else if (sensorProperty == 2){
-        CO2Characteristics.setValue(sensorValue);
+        CO2Characteristics.setValue(value);
         CO2Characteristics.notify();
     }
 }

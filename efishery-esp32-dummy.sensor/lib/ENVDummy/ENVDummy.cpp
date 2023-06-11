@@ -6,7 +6,7 @@ ENVDummy::~ENVDummy() {}
 
 float ENVDummy::readTemperature()
 {
-    temperature = random(19.00, 37.00);
+    temperature = random(19, 37);
     return temperature;
 }
 
