@@ -3,6 +3,7 @@
 #include <ENVClientFunction.h>
 #include <PubSubClient.h>
 #include <ArduinoJson.h>
+#include <asyncportal.h>
 // #include <MQTTClientFunction.h>
 
 String temperatureData, humidityData, co2Data;
@@ -10,8 +11,11 @@ boolean newTemperature, newHumidity, newCo2;
 boolean doConnect = false;
 boolean connected = false;
 
-const char * wifiSsid = "TP-Link_7CAA";
-const char * wifiPassword = "49577471";
+// const char * wifiSsid = "TP-Link_7CAA";
+// const char * wifiPassword = "49577471";
+
+const char * wifiSsid = "dlink-CCD0";
+const char * wifiPassword = "tpbrn33498";
 
 // const char * mqttServer = "1e274e07458745289062e09df40ddbc0.s2.eu.hivemq.cloud";
 // int mqttPort = 8883;
@@ -33,6 +37,8 @@ BLEAddress *pServerAddress;
 WiFiClient esp32client;
 PubSubClient client(esp32client);
 ENVBLEClient envBLE;
+AsyncPortal webServer;
+Preferences preferences;
 
 void callback(char* topic, byte* payload, unsigned int length);
 void publish();
@@ -41,11 +47,25 @@ void MQTTinit();
 void wifiInit();
 String pubMessageStruct();
 
-void setup() {
+void setup() 
+{
  Serial.begin(115200);
- wifiInit();
- MQTTinit();
- envBLE.init();
+ /* ====== Initializing SPIFFS ====== */
+  if(!SPIFFS.begin(true)){
+    Serial.println("An Error has occurred while mounting SPIFFS");
+    return;
+  } else {
+    Serial.println("mounting success");
+  }
+  wifiInit();
+  MQTTinit();
+  preferences.begin(PREFERENCE_NAME, false);
+  preferences.putString(AUTH_KEY, "-");
+  preferences.end();
+  webServer.createLoginServer();
+  webServer.createMainServer();
+  webServer.launchWeb();
+  envBLE.init();
 }
 
 void loop() {
