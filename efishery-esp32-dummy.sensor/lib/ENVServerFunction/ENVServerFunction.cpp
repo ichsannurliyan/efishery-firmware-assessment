@@ -32,6 +32,7 @@ void ENVFunction::serverStart()
     BLEService *envService = pServer->createService(ENVIRONMENT_UUID);
 
     envService->addCharacteristic(&TemperatureCharacteristics);
+
     TemperatureDescriptor.setValue("Temperature");
     TemperatureCharacteristics.addDescriptor(&TemperatureDescriptor);
 
