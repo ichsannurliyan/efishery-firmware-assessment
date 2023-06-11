@@ -1,0 +1,62 @@
+---
+openapi: 3.0.0
+info:
+  title: eFishery
+  version: 1.0.0
+servers:
+- url: http://127.0.0.1:5000
+paths:
+  /sensorData:
+    get:
+      tags:
+      - default
+      summary: Get Sensor Data
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+    post:
+      tags:
+      - default
+      summary: Sensor Data
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                temperature: "23"
+                humidity: "60"
+                co2: "600"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /devices:
+    get:
+      tags:
+      - default
+      summary: Get Devices
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+    post:
+      tags:
+      - default
+      summary: Register Device
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              type: string
+              example: "\"{\\\"name\\\":\\\"environmentSensor\\\",\\\"location\\\":\\\"Bandung\\\"}\""
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+components: {}
