@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script type="text/javascript" src="pw.js"></script>
+</head>
+<body>
+
+<div class="sidenav">
+  <div class="image" style="background-color: white; padding-top: 17px; padding-bottom: 17px;"><img src="efishery"></div>
+  <a href="/deviceStatus" id="statNav" onclick="activeSide(0)">Dashboard</a>
+  <!-- <a href="/deviceInterface" id="intNav" onclick="activeSide(1)">Interface</a> -->
+  <a href="/deviceCommand" id="setNav" onclick="activeSide(2)">Command</a>
+</div>
+
+<div class="upperbox">
+  <h1>STATUS</h1>
+</div>
+
+<div class="status" id="status">
+  <button class="dropdown-btn" >Environment Status
+    <!-- <i class="fa fa-caret-down"></i> -->
+</button>
+<div class="dropdown-container">
+  <div class="container-input-box">
+    <!-- <div class="container-input"> -->
+      <table>
+        <tbody>
+        <tr>
+          <td>
+        <label>
+        Temperature
+        </label>
+      </td>
+      <td>
+        <label class="center">:</label>
+      </td>
+      <td>
+        <label id="model" class = 'right'>%TEMPERATURE%</label>
+      </td>
+      <td>
+        <label class="left">°C</label>
+      </td>
+      </tr>
+    <!-- </div> -->
+    <!-- <div class="container-input"> -->
+      <tr>
+        <td>
+        <label class = 'left'>
+        Humidity
+        </label>
+      </td>
+      <td>
+        <label class="center">:</label>
+      </td>
+      <td>
+        <label id="up_time" class = 'right'>%HUMIDITY%</label>
+      </td>
+      <td>
+        <label class="left">Percent</label>
+      </td>
+      </tr>
+    <!-- </div> -->
+    <!-- <div class="container-input"> -->
+      <tr>
+        <td>
+        <label class = 'left'>
+        CO2
+        </label>
+      </td>
+      <td>
+        <label class="center">:</label>
+      </td>
+      <td>
+        <label id="sys_time" class = 'right'>%CO2%</label>
+      </td>
+      <td>
+        <label class="left">PPM</label>
+      </td>
+      </tr>
+    <!-- </div>     -->
+    <!-- <div class="container-input"> -->
+    <!-- </div> -->
+  </div>
+</tbody>
+</table>
+    <!-- <hr /> -->
+</div>
+</div>
+    
+    
+<button class="dropdown-btn" >Internet Status
+    <!-- <i class="fa fa-caret-down"></i> -->
+</button>
+<div class="dropdown-container">
+    <div class="container-input-box">
+      <table>
+        <tbody>
+          <tr>
+          <td>
+        <label class = 'left'>
+        Connection Mode
+        </label>
+      </td>
+      <td>
+        <label class="center">:</label>
+      </td>
+      <td>
+        <label id="sys_time_2" class = 'right'>%CONNECTION_MODE%</label>
+      </td>
+    </tr>
+    <!-- </div>    
+    <div class="container-input"> -->
+        <tr>
+          <td>
+        <label class = 'left'>
+        Connection Status
+        </label>
+      </td>
+      <td>
+        <label class="center">:</label>
+      </td>
+      <td>
+        <label id="active_link" class = 'right'>%CONNECTION_STATUS%</label>
+      </td>
+    </tr>
+    <!-- </div>    
+    <div class="container-input"> -->
+      <tr>
+        <td>
+      <label class = 'left'>
+      Connection
+      </label>
+    </td>
+    <td>
+      <label class="center">:</label>
+    </td>
+    <td>
+      <label id="active_link" class = 'right'>%CONNECTION%</label>
+    </td>
+  </tr>
+        <tr>
+          <td>
+        <label class = 'left'>
+        IP Address
+        </label>
+      </td>
+      <td>
+        <label class="center">:</label>
+      </td>
+      <td>
+        <label id="ip" class = 'right'>%IPADDRESS%</label>
+      </td>
+    </tr>
+    <!-- </div>
+    <div class="container-input"> -->
+        <tr>
+          <td>
+        <label class = 'left'>
+        Gateway
+        </label>
+      </td>
+      <td>
+        <label class="center">:</label>
+      </td>
+      <td>
+        <label id="ip_gtw" class = 'right'>%GATEWAY%</label>
+      </td>
+    </tr>
+    <!-- </div>
+    <div class="container-input"> -->
+        <tr>
+          <td>
+        <label class = 'left'>
+        Uptime
+        </label>
+      </td>
+      <td>
+        <label class="center">:</label>
+      </td>
+      <td>
+        <label id="internet_uptime" class = 'right'>%SYSTEM_UPTIME%</label>
+      </td>
+    </tr>
+    <!-- </div>
+    <div class="container-input"> -->
+        <tr>
+          <td>
+        <label class = 'left'>
+        DNS
+        </label>
+      </td>
+      <td>
+        <label class="center">:</label>
+      </td>
+      <td>
+        <label id="dns" class = 'right'>%DNS%</label>
+      </td>
+    </tr>
+    <!-- </div> -->
+  </div>
+</tbody>
+</table>
+    </div>
+  </div>
+</div>
+
+<!-- <div class="interface" id="interface">
+  <h2>Interface</h2>
+  <p>Ini interface bro</p>
+</div> -->
+
+<script>
+  function activeSide(x) {
+    var statusNavigation = document.getElementById("statNav");
+    var interfaceNavigation = document.getElementById("intNav");
+    var settingNavigation = document.getElementById("setNav");
+    var contactNavigation = document.getElementById("conNav");
+    if (x == 0) {
+      statusNavigation.className = "active"
+      interfaceNavigation.className = ""
+      settingNavigation.className = ""
+      contactNavigation.className = ""
+    } else if (x == 1) {
+      interfaceNavigation.className = "active"
+      statusNavigation.className = ""
+      settingNavigation.className = ""
+      contactNavigation.className = ""
+    } else if (x == 2) {
+      settingNavigation.className = "active"
+      interfaceNavigation.className = ""
+      statusNavigation.className = ""
+      contactNavigation.className = ""
+    } else if (x == 3) {
+      contactNavigation.className = "active"
+      interfaceNavigation.className = ""
+      statusNavigation.className = ""
+      settingNavigation.className = ""
+    }
+  }
+
+  /* Loop through all dropdown buttons to toggle between hiding and showing its dropdown content - This allows the user to have multiple dropdowns without any conflict */
+  var dropdown = document.getElementsByClassName("dropdown-btn");
+    var i;
+
+  for (i = 0; i < dropdown.length; i++) {
+      dropdown[i].addEventListener("click", function() {
+          this.classList.toggle("active");
+          var dropdownContent = this.nextElementSibling;
+          var caret = document.getElementsByClassName("dropdown-btn").children;
+          
+          if (dropdownContent.style.display === "block") {
+              dropdownContent.style.display = "none";
+              caret.style.backgroundColor = "yellow";
+              alert(caret.value);
+              caret.classList.remove("fa fa-caret-down"); 
+          } else {
+              dropdownContent.style.display = "block";
+          }
+      });
+  }
+  // function loadDoc() {
+  //   var xhttp = new XMLHttpRequest();
+  //   xhttp.onreadystatechange = function() {
+  //     if (this.readyState == 4 && this.status == 200) {
+  //     document.getElementById("status").innerHTML = this.responseText;
+  //     }
+  //   };
+  //   alert(this.status)
+  //   xhttp.open("GET", "ajax_info.txt", true);
+  //   xhttp.send();
+  // }
+</script>
+</body>
+</html> 

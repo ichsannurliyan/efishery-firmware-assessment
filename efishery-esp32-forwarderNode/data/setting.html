@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  background-color: rgb(255, 255, 255);;
+  font-family: "Lato", sans-serif;
+}
+
+.image {
+  /* background-color: #bbbbbb; */
+}
+
+ img {
+  height: 20%;
+  width: 60%;
+  margin-left: 50px;
+  margin-right: 50px;
+  /* background-color: rgb(205, 205, 205); */
+  /* background-blend-mode: color; */
+  
+}
+
+.upperbox {
+  height: 90px;
+  width: 100%;
+  position: fixed;
+  z-index: 0;
+  top: 0;
+  left: 0;
+  margin-left: 125px;
+  margin-top: 0px;
+  text-align: center;
+  /* text-align: end; */
+  /* background-color: rgb(145, 147, 251); */
+  background-color: rgb(17, 164, 137);;
+  overflow-x: hidden;
+  padding-top: 10px;
+  /* border: px solid black; */
+  /* opacity: 0.5; */
+}
+
+.sidenav {
+  height: 100%;
+  width: 250px;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  /* background-color: rgb(76, 79, 245); */
+  background-color: rgb(17, 164, 137);;
+  overflow-x: hidden;
+  padding-top: 0px;
+  border: 0.5px solid rgb(17, 164, 137);;
+}
+
+.sidenav a {
+  margin-top: 10px;
+  background-color: transparent;
+  border-radius: 0px;
+  padding: 6px 8px 6px 16px;
+  text-decoration: none;
+  font-size: 25px;
+  color: black;
+  display: block;
+}
+
+.sidenav a:hover {
+  color: #f1f1f1;
+}
+
+.sidenav a.active {
+  background-color: #f1f1f1;
+  color:black;
+}
+
+.status {
+  margin-left: 250px; /* Same as the width of the sidenav */
+  margin-top: 160px;
+  font-size: 22px; /* Increased text to enable scrolling */
+  padding: 0px 10px;
+}
+
+.interface {
+  margin-left: 160px; /* Same as the width of the sidenav */
+  font-size: 28px; /* Increased text to enable scrolling */
+  padding: 0px 10px;
+}
+
+.submit {
+    background-color: #4d64fa;
+    border: none;
+    border-radius: 10px;
+    margin: 20px auto;
+    width: 15%;
+    padding: 17px;
+    font-size: 10px;
+    color: white;
+    text-align: center;
+}
+
+label{
+    margin: auto 20px 3px auto;
+}
+.left{
+    width:41%;
+    text-align:right;
+}
+.right{
+    width:20%;
+    text-align:left;
+}
+.container-input{
+    /* display: flex; */
+    /* align-items:flex-start; */
+    /* align-content: flex-start; */
+    width:100%;
+    margin: 3px auto 3px auto;
+    /* text-align: center; */
+}
+.dropdown-container {
+    display: none;
+    background-color: whitesmoke;
+    padding: 10px 10px 10px 10px;
+    border: 0.5px solid black;
+}
+.dropdown-btn{
+    border: 1px solid black;
+    border-radius: 10px;
+    /* background-color: rgb(114, 191, 214); */
+    background-color: rgb(17, 164, 137);;
+    /* border: none; */
+    margin: 20px auto;
+    width: 100%;
+    padding: 17px;
+    font-size: 15px;
+    color: black;
+    text-align: center;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.switch input { 
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+</style>
+</head>
+<body>
+
+
+
+<div class="sidenav">
+  <div class="image" style="background-color: white; padding-top: 17px; padding-bottom: 17px;"><img src="efishery"></div>
+  <a href="/deviceStatus" id="statNav" onclick="">Dashboard</a>
+  <!-- <a href="/deviceInterface" id="intNav" onclick="">Interface</a> -->
+  <a href="/deviceCommand" id="setNav" onclick="">Command</a>
+</div>
+
+<div class="upperbox">
+  <h1>COMMAND</h1>
+</div>
+
+<!-- <div class="status" id="status">
+  <h2>Sidebar</h2>
+  <p>This sidebar is of full height (100%) and always shown.</p>
+  <p>Scroll down the page to see the result.</p>
+  <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
+  <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
+  <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
+  <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
+</div> -->
+
+<div class="status" id="status">
+  <button class="dropdown-btn" >Features Setting
+    <i class="fa fa-caret-down"></i>
+</button>
+<div class="dropdown-container">
+    <form action="/voiceCall" name="link" id="linkSetting">
+    <div class="container-input">
+        <label class = 'left'>
+            MQTT Command
+            </label>
+            <label class="switch">
+              <input type="checkbox" name="Voice" id="voice">
+              <span class="slider"></span>
+            </label>
+    </div>
+    <!-- <div class="container-input">
+        <label class = 'left'>
+        Username
+        </label>
+        <input name="Apn" id="apn">
+    </div>
+    <div class="container-input">
+        <label class = 'left'>
+        Password
+        </label>
+        <input name="Apn" id="apn">
+    </div>    -->
+    <button name="submit" id="submit-btn">Save</button> 
+    </form>
+</div>
+    
+    
+<button class="dropdown-btn" >Reboot
+    <i class="fa fa-caret-down"></i>
+</button>
+<div class="dropdown-container">
+    <div class="container-input">
+      <form action="/setting.html/reboot" method="get" style="display:flex;flex-direction: column;" class="form ">
+        <button id="submit-btn" type="submit" name="submit" class="login">Reboot</button>
+      </form>
+        <!-- <label class = 'left'>
+        Network Setting&emsp;:
+        </label> -->
+        <!-- <form action="/rebootSetting">
+            <label for="cars">Reboot Time Interval</label>
+            <select name="cars" id="cars">
+              <option value="24">24 Hour</option>
+              <option value="12">12 Hour</option>
+              <option value="6">6 Hour</option>
+              <option value="1">1 Hour</option>
+            </select>
+            <br><br>
+            <input type="submit" value="Submit">
+          </form> -->
+        <label id="sys_time_2" class = 'right'></label>
+    </div>    
+  </div>
+</div>
+
+<!-- <div class="interface" id="interface">
+  <h2>Interface</h2>
+  <p>Ini interface bro</p>
+</div> -->
+
+<script>
+//   function activeSide(x) {
+//     var statusNavigation = document.getElementById("statNav");
+//     var interfaceNavigation = document.getElementById("intNav");
+//     var settingNavigation = document.getElementById("setNav");
+//     var contactNavigation = document.getElementById("conNav");
+//     if (x == 0) {
+//       statusNavigation.className = "active"
+//       interfaceNavigation.className = ""
+//       settingNavigation.className = ""
+//       contactNavigation.className = ""
+//     } else if (x == 1) {
+//       interfaceNavigation.className = "active"
+//       statusNavigation.className = ""
+//       settingNavigation.className = ""
+//       contactNavigation.className = ""
+//     } else if (x == 2) {
+//       settingNavigation.className = "active"
+//       interfaceNavigation.className = ""
+//       statusNavigation.className = ""
+//       contactNavigation.className = ""
+//     } else if (x == 3) {
+//       contactNavigation.className = "active"
+//       interfaceNavigation.className = ""
+//       statusNavigation.className = ""
+//       settingNavigation.className = ""
+//     }
+//   }
+
+  /* Loop through all dropdown buttons to toggle between hiding and showing its dropdown content - This allows the user to have multiple dropdowns without any conflict */
+  var dropdown = document.getElementsByClassName("dropdown-btn");
+    var i;
+
+  for (i = 0; i < dropdown.length; i++) {
+      dropdown[i].addEventListener("click", function() {
+          this.classList.toggle("active");
+          var dropdownContent = this.nextElementSibling;
+          var caret = document.getElementsByClassName("dropdown-btn").children;
+          
+          if (dropdownContent.style.display === "block") {
+              dropdownContent.style.display = "none";
+              caret.style.backgroundColor = "yellow";
+              alert(caret.value);
+              caret.classList.remove("fa fa-caret-down"); 
+          } else {
+              dropdownContent.style.display = "block";
+          }
+      });
+  }
+  // function loadDoc() {
+  //   var xhttp = new XMLHttpRequest();
+  //   xhttp.onreadystatechange = function() {
+  //     if (this.readyState == 4 && this.status == 200) {
+  //     document.getElementById("status").innerHTML = this.responseText;
+  //     }
+  //   };
+  //   alert(this.status)
+  //   xhttp.open("GET", "ajax_info.txt", true);
+  //   xhttp.send();
+  // }
+</script>
+</body>
+</html> 
